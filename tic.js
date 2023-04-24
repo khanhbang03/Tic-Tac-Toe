@@ -61,74 +61,53 @@ function win(n, p) {
             return true;
         }
     } else {
-        // check for 4 in a row and 5 in a row
-        var w4 = (a, b, c, d) => {
-            a = box[a[0] * size + a[1]].value;
-            b = box[b[0] * size + b[1]].value;
-            c = box[c[0] * size + c[1]].value;
-            d = box[d[0] * size + d[1]].value;
-            return a + b + c + d == p + p + p + p;
-        };
-        var w5 = (a, b, c, d, e) => {
-            a = box[a[0] * size + a[1]].value;
-            b = box[b[0] * size + b[1]].value;
-            c = box[c[0] * size + c[1]].value;
-            d = box[d[0] * size + d[1]].value;
-            e = box[e[0] * size + e[1]].value;
-            return a + b + c + d + e == p + p + p + p + p;
-        };
-        // horizontal
-        for (let i = 0; i < size; i++) {
-            for (let j = 0; j + 4 < size; j++) {
-                if (0 < j && box[i * size + j - 1].value == "" && box[i * size + j + 4].value == "") {
-                    if (w4([i, j], [i, j + 1], [i, j + 2], [i, j + 3])) {
-                        return true;
+        // check if the current player can win
+        for (let move = 0; move < size * size; move++) {
+            if (box[move].value == "") {
+                box[move].value = turn;
+                var w5 = (a, b, c, d, e) => {
+                    a = box[a[0] * size + a[1]].value;
+                    b = box[b[0] * size + b[1]].value;
+                    c = box[c[0] * size + c[1]].value;
+                    d = box[d[0] * size + d[1]].value;
+                    e = box[e[0] * size + e[1]].value;
+                    return a + b + c + d + e == p + p + p + p + p;
+                };
+                // horizontal
+                for (let i = 0; i < size; i++) {
+                    for (let j = 0; j + 4 < size; j++) {
+                        if (w5([i, j], [i, j + 1], [i, j + 2], [i, j + 3], [i, j + 4])) {
+                            return true;
+                        }
                     }
                 }
-                if (w5([i, j], [i, j + 1], [i, j + 2], [i, j + 3], [i, j + 4])) {
-                    return true;
-                }
-            }
-        }
-        // vertical
-        for (let i = 0; i + 4 < size; i++) {
-            for (let j = 0; j < size; j++) {
-                if (0 < i && box[(i - 1) * size + j].value == "" && box[(i + 4) * size + j].value == "") {
-                    if (w4([i, j], [i + 1, j], [i + 2, j], [i + 3, j])) {
-                        return true;
+                // vertical
+                for (let i = 0; i + 4 < size; i++) {
+                    for (let j = 0; j < size; j++) {
+                        if (w5([i, j], [i + 1, j], [i + 2, j], [i + 3, j], [i + 4, j])) {
+                            return true;
+                        }   
                     }
                 }
-                if (w5([i, j], [i + 1, j], [i + 2, j], [i + 3, j], [i + 4, j])) {
-                    return true;
-                }   
-            }
-        }
-        // primary diagonal
-        for (let i = 0; i + 4 < size; i++) {
-            for (let j = 0; j + 4 < size; j++) {
-                if (0 < i && 0 < j && box[(i - 1) * size + j - 1].value == "" && box[(i + 4) * size + j + 4].value == "") {
-                    if (w4([i, j],[i + 1, j + 1],[i + 2, j + 2],[i + 3, j + 3])) {
-                        return true;
+                // primary diagonal
+                for (let i = 0; i + 4 < size; i++) {
+                    for (let j = 0; j + 4 < size; j++) {
+                        if (w5([i, j],[i + 1, j + 1],[i + 2, j + 2],[i + 3, j + 3],[i + 4, j + 4])) {
+                            return true;
+                        }
                     }
                 }
-                if (w5([i, j],[i + 1, j + 1],[i + 2, j + 2],[i + 3, j + 3],[i + 4, j + 4])) {
-                    return true;
-                }
-            }
-        }
-        // secondary diagonal
-        for (let i = 0; i + 4 < size; i++) {
-            for (let j = 4; j < size; j++) {
-                if (0 < i && j + 1 < size && box[(i - 1) * size + j + 1].value == "" && box[(i + 4) * size + j - 4].value == "") {
-                    if (w4([i, j],[i + 1, j - 1],[i + 2, j - 2],[i + 3, j - 3])) {
-                        return true;
+                // secondary diagonal
+                for (let i = 0; i + 4 < size; i++) {
+                    for (let j = 4; j < size; j++) {
+                        if (w5([i, j],[i + 1, j - 1],[i + 2, j - 2],[i + 3, j - 3],[i + 4, j - 4])) {
+                            return true;
+                        }
                     }
                 }
-                if (w5([i, j],[i + 1, j - 1],[i + 2, j - 2],[i + 3, j - 3],[i + 4, j - 4])) {
-                    return true;
-                }
+                box[move].value = "";
             }
-        }
+        }  
     }
 }
 
