@@ -119,7 +119,7 @@ function win(n, p) {
         // secondary diagonal
         for (let i = 0; i + 4 < size; i++) {
             for (let j = 4; j < size; j++) {
-                if (0 < i && 4 < j && box[(i - 1) * size + j + 1].value == "" && box[(i + 4) * size + j - 4].value == "") {
+                if (0 < i && j + 1 < size && box[(i - 1) * size + j + 1].value == "" && box[(i + 4) * size + j - 4].value == "") {
                     if (w4([i, j],[i + 1, j - 1],[i + 2, j - 2],[i + 3, j - 3])) {
                         return true;
                     }
