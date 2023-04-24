@@ -75,43 +75,36 @@ function win(n, p) {
                 return true;
             }
         };
-        // check if the current player can win (when he plays optimally)
-        for (let move = 0; move < size * size; move++) {
-            if (box[move].value == "") {
-                box[move].value = turn;
-                // horizontal
-                for (let i = 0; i < size; i++) {
-                    for (let j = 0; j + 4 < size; j++) {
-                        if (w5([i, j], [i, j + 1], [i, j + 2], [i, j + 3], [i, j + 4])) {
-                            return true;
-                        }
-                    }
+        // horizontal
+        for (let i = 0; i < size; i++) {
+            for (let j = 0; j + 4 < size; j++) {
+                if (w5([i, j], [i, j + 1], [i, j + 2], [i, j + 3], [i, j + 4])) {
+                    return true;
                 }
-                // vertical
-                for (let i = 0; i + 4 < size; i++) {
-                    for (let j = 0; j < size; j++) {
-                        if (w5([i, j], [i + 1, j], [i + 2, j], [i + 3, j], [i + 4, j])) {
-                            return true;
-                        }   
-                    }
+            }
+        }
+        // vertical
+        for (let i = 0; i + 4 < size; i++) {
+            for (let j = 0; j < size; j++) {
+                if (w5([i, j], [i + 1, j], [i + 2, j], [i + 3, j], [i + 4, j])) {
+                    return true;
+                }   
+            }
+        }
+        // primary diagonal
+        for (let i = 0; i + 4 < size; i++) {
+            for (let j = 0; j + 4 < size; j++) {
+                if (w5([i, j],[i + 1, j + 1],[i + 2, j + 2],[i + 3, j + 3],[i + 4, j + 4])) {
+                    return true;
                 }
-                // primary diagonal
-                for (let i = 0; i + 4 < size; i++) {
-                    for (let j = 0; j + 4 < size; j++) {
-                        if (w5([i, j],[i + 1, j + 1],[i + 2, j + 2],[i + 3, j + 3],[i + 4, j + 4])) {
-                            return true;
-                        }
-                    }
+            }
+        }
+        // secondary diagonal
+        for (let i = 0; i + 4 < size; i++) {
+            for (let j = 4; j < size; j++) {
+                if (w5([i, j],[i + 1, j - 1],[i + 2, j - 2],[i + 3, j - 3],[i + 4, j - 4])) {
+                    return true;
                 }
-                // secondary diagonal
-                for (let i = 0; i + 4 < size; i++) {
-                    for (let j = 4; j < size; j++) {
-                        if (w5([i, j],[i + 1, j - 1],[i + 2, j - 2],[i + 3, j - 3],[i + 4, j - 4])) {
-                            return true;
-                        }
-                    }
-                }
-                box[move].value = "";
             }
         }
     }
@@ -140,24 +133,36 @@ function print(data) {
 }
 
 function check(n) {
-    if (win(n, "X")) {
-        disable();
-        print("Player X won");
-        window.alert("Player X won");
-    } else if (win(n, "O")) {
-        disable();
-        print("Player O won");
-        window.alert("Player O won");
-    } else if (tie()) {
+    // try every possible move to see if the current player can win
+    for (let move = 0; move < size * size; move++) {
+        if (box[move].value == "") {
+            // trial move
+            box[move].value = turn;
+            if (win(n, "X")) {
+                disable();
+                print("Player X won");
+                window.alert("Player X won");
+                return;
+            }
+            if (win(n, "O")) {
+                disable();
+                print("Player O won");
+                window.alert("Player O won");
+                return;
+            }
+            // reset trial move
+            box[move].value = "";
+        }
+    }
+
+    if (tie()) {
         disable();
         print("Match tie");
         window.alert("Match tie");
+    } else if (turn == "X") {
+        print("Player X Turn");
     } else {
-        if (turn == "X") {
-            print("Player X Turn");
-        } else {
-            print("Player O Turn");
-        }
+        print("Player O Turn");
     }
 }
 
