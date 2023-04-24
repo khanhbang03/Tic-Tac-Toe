@@ -133,6 +133,16 @@ function print(data) {
 }
 
 function check(n) {
+    if (tie()) {
+        disable();
+        print("Match tie");
+        window.alert("Match tie");
+    } else if (turn == "X") {
+        print("Player X Turn");
+    } else {
+        print("Player O Turn");
+    }
+
     // try every possible move to see if the current player can win
     for (let move = 0; move < size * size; move++) {
         if (box[move].value == "") {
@@ -153,16 +163,6 @@ function check(n) {
             // reset trial move
             box[move].value = "";
         }
-    }
-
-    if (tie()) {
-        disable();
-        print("Match tie");
-        window.alert("Match tie");
-    } else if (turn == "X") {
-        print("Player X Turn");
-    } else {
-        print("Player O Turn");
     }
 }
 
