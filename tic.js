@@ -46,10 +46,13 @@ function win(n, p) {
     if (n == 3) {
         // check for 3 in a row
         var w = (a, b, c) => {
-            a = box[a].value;
-            b = box[b].value;
-            c = box[c].value;
-            return a + b + c == p + p + p;
+            a = box[a];
+            b = box[b];
+            c = box[c];
+            if (a.value + b.value + c.value == p + p + p) {
+                a.style.color = b.style.color = c.style.color = "blue";
+                return true;
+            }
         };
         if (
             w(0, 1, 2) ||
@@ -61,18 +64,21 @@ function win(n, p) {
             return true;
         }
     } else {
-        // check if the current player can win
+        var w5 = (a, b, c, d, e) => {
+            a = box[a[0] * size + a[1]];
+            b = box[b[0] * size + b[1]];
+            c = box[c[0] * size + c[1]];
+            d = box[d[0] * size + d[1]];
+            e = box[e[0] * size + e[1]];
+            if (a.value + b.value + c.value + d.value + e.value == p + p + p + p + p) {
+                a.style.color = b.style.color = c.style.color = d.style.color = e.style.color = "red";
+                return true;
+            }
+        };
+        // check if the current player can win (when he plays optimally)
         for (let move = 0; move < size * size; move++) {
             if (box[move].value == "") {
                 box[move].value = turn;
-                var w5 = (a, b, c, d, e) => {
-                    a = box[a[0] * size + a[1]].value;
-                    b = box[b[0] * size + b[1]].value;
-                    c = box[c[0] * size + c[1]].value;
-                    d = box[d[0] * size + d[1]].value;
-                    e = box[e[0] * size + e[1]].value;
-                    return a + b + c + d + e == p + p + p + p + p;
-                };
                 // horizontal
                 for (let i = 0; i < size; i++) {
                     for (let j = 0; j + 4 < size; j++) {
@@ -107,7 +113,7 @@ function win(n, p) {
                 }
                 box[move].value = "";
             }
-        }  
+        }
     }
 }
 
