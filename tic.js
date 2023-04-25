@@ -42,6 +42,8 @@ function Run5() {
 
 box = document.getElementsByTagName("input");
 
+// In reality, the player will not necessarily play optimally
+// In this program, the computer ends the game whenever it has detected a possible win for the current player (it will try to win whenever it can)
 function win(n, p) {
     if (n == 3) {
         // check for 3 in a row
